@@ -1,0 +1,12 @@
+#search-page{
+    text-align: center;
+    padding-top: 50px;
+}
+
+#search-form {
+    margin-top: 20px;
+}
+
+#search-form-input {
+    width: 50%;
+}

@@ -1,0 +1,22 @@
+{% extends "weather/layout.html" %}
+{% load static %}
+
+{% block title %}
+<title>Weather</title>
+<link href = "{% static 'weather/styles_index.css' %}" rel = "stylesheet">
+<script src = "{% static 'weather/index.js' %}"></script>
+{% endblock %}
+
+
+{% block body %}
+<div id = "search-page">
+    <h1>Search for a city</h1>
+    <form id = "search-form">
+        <input id = "search-form-input" type = "text" autocomplete = "off" autofocus = "off" placeholder="City">
+        <button type = "submit">Search</button>
+    </form>
+</div>
+<div id = "city-weather-page">
+
+</div>
+{% endblock %}
