@@ -26,28 +26,41 @@ function load_index(){
 function search_city(){
     let city = document.querySelector("#search-form-input").value
     console.log(city)
-    fetch(`https://api.api-ninjas.com/v1/city?name=${city}`, {
+    try {
+        fetch(`https://api.api-ninjas.com/v1/city?name=${city}`, {
         method: "GET",
         headers: {
             "content-type": "application/json",
             'X-Api-Key': 'rOd9xgW3XzIvsnKX4GA9yQ==BuY0s4RkNJJYuZkU'
         }
-    })
+     })
+
     .then(res => res.json())
-    .then(data => get_city_data(data))
+    .then(data =>{
+        weather_data(data);
+    })
+    } catch(err) {
+        console.log(`ERROR: ${err}`)
+    };
 
 }; 
 
-function get_city_data(data){
-    
-}
-
-function get_weather_data(longitude, latitude){
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=35&longitude=105&hourly=temperature_2m")
+function weather_data(city_location) {
+    try {
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city_location[0].latitude}&longitude=${city_location[0].longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,visibility`)
     .then(res => res.json())
     .then(data => {
-        console.log(data)
-        return data;
+        clear_page();
+        load_weather_page(city_location, data)
     })
-
+    } catch(err) {
+        console.log(`ERROR: ${err}`);
+    }
+    
 };
+
+function load_weather_page(city_general_info, weather_info) {
+    console.log(city_general_info[0], weather_info);
+    clear_page();
+    document.querySelector("#city-weather-page").style.display = "block";
+}
