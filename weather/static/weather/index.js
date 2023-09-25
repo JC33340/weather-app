@@ -34,10 +34,9 @@ function search_city(){
             'X-Api-Key': 'rOd9xgW3XzIvsnKX4GA9yQ==BuY0s4RkNJJYuZkU'
         }
      })
-
     .then(res => res.json())
     .then(data =>{
-        weather_data(data);
+        weather_data(data[0]);
     })
     } catch(err) {
         console.log(`ERROR: ${err}`)
@@ -47,7 +46,7 @@ function search_city(){
 
 function weather_data(city_location) {
     try {
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city_location[0].latitude}&longitude=${city_location[0].longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,visibility`)
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city_location.latitude}&longitude=${city_location.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,visibility`)
     .then(res => res.json())
     .then(data => {
         clear_page();
@@ -60,7 +59,6 @@ function weather_data(city_location) {
 };
 
 function load_weather_page(city_general_info, weather_info) {
-    console.log(city_general_info[0], weather_info);
-    clear_page();
+    console.log(city_general_info, weather_info);
     document.querySelector("#city-weather-page").style.display = "block";
 }
