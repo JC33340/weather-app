@@ -60,5 +60,21 @@ function weather_data(city_location) {
 
 function load_weather_page(city_general_info, weather_info) {
     console.log(city_general_info, weather_info);
-    document.querySelector("#city-weather-page").style.display = "block";
+
+    const weather_page = document.querySelector("#city-weather-page")
+    weather_page.style.display = "block";
+
+    //title for page with city
+    const city_title_div = document.createElement("div")
+    city_title_div.setAttribute("id", "city_title_div")
+    const city_title = document.createElement("h1");
+    const country_title = document.createElement("h3")
+    city_title.style.display = "inline";
+    country_title.style.display = "inline";
+    city_title.innerHTML = `${city_general_info.name}, `
+    country_title.innerHTML = `${city_general_info.country}`
+    city_title_div.append(city_title, country_title)
+    city_title_div.style.animationPlayState = 'running';
+
+    weather_page.append(city_title_div);
 }

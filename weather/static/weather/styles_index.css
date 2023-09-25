@@ -10,3 +10,26 @@
 #search-form-input {
     width: 50%;
 }
+
+#city-weather-page{
+    text-align: center;
+    padding: 10px;
+}
+
+#city-weather-page #city_title_div {
+    color: lightblue;
+
+    position: relative;
+    animation-name: slide;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slide {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0%;
+    }
+}
