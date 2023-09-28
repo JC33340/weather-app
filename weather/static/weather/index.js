@@ -27,7 +27,7 @@ function search_city(){
     let city = document.querySelector("#search-form-input").value
     console.log(city)
     try {
-        fetch(`https://api.api-ninjas.com/v1/city?name=${city}`, {
+        fetch(`https://api.api-ninjas.com/v1/city?name=${city}&limit=20`, {
         method: "GET",
         headers: {
             "content-type": "application/json",
@@ -36,7 +36,8 @@ function search_city(){
      })
     .then(res => res.json())
     .then(data =>{
-        weather_data(data[0]);
+        console.log(data)
+        selection_page(data);
     })
     } catch(err) {
         console.log(`ERROR: ${err}`)
@@ -44,7 +45,32 @@ function search_city(){
 
 }; 
 
-function weather_data(city_location) {
+function selection_page(data) {
+    clear_page();
+    const city_selector_page = document.querySelector("#city-selection-page")
+    city_selector_page.style.display = "block";
+
+    for(let i = 0; i < data.length; i++) {
+        let selection_page_city_div = document.createElement("div");
+        selection_page_city_div.setAttribute("id", "selection-page-city-div")
+
+        let selection_page_city_country_name  = document.createElement("b");
+        selection_page_city_country_name.setAttribute("id", "selection-page-city-div-title")
+        selection_page_city_country_name.innerHTML = `${data[i].name}, ${data[i].country}\n`;
+
+        let line_break = document.createElement("br");
+
+        let selection_page_population = document.createElement("span");
+        selection_page_population.innerHTML = `Population: ${data[i].population}`
+
+        selection_page_city_div.append(selection_page_city_country_name, line_break, selection_page_population);
+
+        city_selector_page.append(selection_page_city_div);
+    }
+
+}
+
+/*function weather_data(city_location) {
     try {
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city_location.latitude}&longitude=${city_location.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,visibility`)
     .then(res => res.json())
@@ -56,9 +82,9 @@ function weather_data(city_location) {
         console.log(`ERROR: ${err}`);
     }
     
-};
+};*/
 
-function load_weather_page(city_general_info, weather_info) {
+/*function load_weather_page(city_general_info, weather_info) {
     console.log(city_general_info, weather_info);
 
     const weather_page = document.querySelector("#city-weather-page")
@@ -77,4 +103,4 @@ function load_weather_page(city_general_info, weather_info) {
     city_title_div.style.animationPlayState = 'running';
 
     weather_page.append(city_title_div);
-}
+}*/

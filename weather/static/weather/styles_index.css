@@ -33,3 +33,15 @@
         left: 0%;
     }
 }
+
+#selection-page-city-div {
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+}
+
+#selection-page-city-div #selection-page-city-div-title {
+    font-size: 20px;
+}
