@@ -34,14 +34,26 @@
     }
 }
 
-#selection-page-city-div {
+.selection-page-city-div {
     text-align: center;
     border: 2px solid black;
     border-radius: 5px;
     margin: 5px;
+    margin-bottom: 20px;
     padding: 5px;
+    transition: box-shadow .3s;
+    animation-name: slide;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    position: relative;
 }
 
-#selection-page-city-div #selection-page-city-div-title {
+.selection-page-city-div:hover {
+    box-shadow: 0 0 10px black;;
+}
+
+
+
+.selection-page-city-div #selection-page-city-div-title {
     font-size: 20px;
 }

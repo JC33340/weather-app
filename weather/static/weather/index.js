@@ -49,10 +49,12 @@ function selection_page(data) {
     clear_page();
     const city_selector_page = document.querySelector("#city-selection-page")
     city_selector_page.style.display = "block";
-
+    let count = 0;
     for(let i = 0; i < data.length; i++) {
         let selection_page_city_div = document.createElement("div");
-        selection_page_city_div.setAttribute("id", "selection-page-city-div")
+        selection_page_city_div.setAttribute("class", "selection-page-city-div")
+        selection_page_city_div.setAttribute("id", `selection-page-city-div-${i}`)
+        selection_page_city_div.style.display = "none";
 
         let selection_page_city_country_name  = document.createElement("b");
         selection_page_city_country_name.setAttribute("id", "selection-page-city-div-title")
@@ -66,7 +68,15 @@ function selection_page(data) {
         selection_page_city_div.append(selection_page_city_country_name, line_break, selection_page_population);
 
         city_selector_page.append(selection_page_city_div);
+        setTimeout(function() {play_selection_page_animation(`#selection-page-city-div-${i}`);}, count);
+        count += 200;
     }
+
+}
+
+function play_selection_page_animation(div_id){
+    const div = document.querySelector(div_id);
+    div.style.display = "block";
 
 }
 
