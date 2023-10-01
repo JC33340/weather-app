@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //clearign all divs
 function clear_page() {
-    document.querySelectorAll("#search-page, #city-weather-page").forEach(div => {
+    document.querySelectorAll("#search-page, #city-weather-page, #city-selection-page").forEach(div => {
         div.style.display = "none"
     })
 };
@@ -68,21 +68,25 @@ function selection_page(data) {
         selection_page_city_div.append(selection_page_city_country_name, line_break, selection_page_population);
 
         city_selector_page.append(selection_page_city_div);
+        selection_page_city_div.addEventListener("click", () => {
+            weather_data(data[i])
+        })
         setTimeout(function() {play_selection_page_animation(`#selection-page-city-div-${i}`);}, count);
         count += 200;
     }
 
 }
 
+//function used for timing divs
 function play_selection_page_animation(div_id){
     const div = document.querySelector(div_id);
-    div.style.display = "block";
+    div.style.display = "block"; 
 
 }
 
-/*function weather_data(city_location) {
+function weather_data(city_location) {
     try {
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city_location.latitude}&longitude=${city_location.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,visibility`)
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city_location.latitude}&longitude=${city_location.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,cloudcover,visibility&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,windspeed_10m_max&timezone=GMT`)
     .then(res => res.json())
     .then(data => {
         clear_page();
@@ -92,11 +96,11 @@ function play_selection_page_animation(div_id){
         console.log(`ERROR: ${err}`);
     }
     
-};*/
+};
 
-/*function load_weather_page(city_general_info, weather_info) {
+function load_weather_page(city_general_info, weather_info) {
     console.log(city_general_info, weather_info);
-
+    clear_page()
     const weather_page = document.querySelector("#city-weather-page")
     weather_page.style.display = "block";
 
@@ -110,7 +114,14 @@ function play_selection_page_animation(div_id){
     city_title.innerHTML = `${city_general_info.name}, `
     country_title.innerHTML = `${city_general_info.country}`
     city_title_div.append(city_title, country_title)
-    city_title_div.style.animationPlayState = 'running';
+    weather_page.querySelector("#city-weather-page-title-div").append(city_title_div);
 
-    weather_page.append(city_title_div);
-}*/
+    const date_div = weather_page.querySelector("#city-weather-page-button-div");
+    console.log(weather_info.daily.time);
+    for (date in weather_info.daily.time) {
+        let date_button = document.createElement("button");
+        date_button.innerHTML = weather_info.daily.time[date]
+        date_button.setAttribute("class", "weather-page-button")
+        document.querySelector("#city-weather-page #city-weather-page-button-div").append(date_button)
+    }
+}

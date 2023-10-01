@@ -17,12 +17,13 @@
 }
 
 #city-weather-page #city_title_div {
-    color: lightblue;
+    color: #6D85CA;
 
     position: relative;
     animation-name: slide;
     animation-duration: 2s;
     animation-fill-mode: forwards;
+    margin-bottom: 20px;
 }
 
 @keyframes slide {
@@ -52,8 +53,24 @@
     box-shadow: 0 0 10px black;;
 }
 
-
-
 .selection-page-city-div #selection-page-city-div-title {
     font-size: 20px;
+}
+
+#city-selection-page {
+    text-align: center;
+}
+
+.weather-page-button {
+    margin: 5px;
+    color: #6D85CA;
+    border: 1px solid #6D85CA;
+    border-radius: 5px;
+    background-color: white;
+    transition: hover;
+}
+
+.weather-page-button:hover {
+    color: white;
+    background-color: #6D85CA;
 }
