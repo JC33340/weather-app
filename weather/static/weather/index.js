@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 })
 
-//clearign all divs
+//clearing all divs
 function clear_page() {
     document.querySelectorAll("#search-page, #city-weather-page, #city-selection-page").forEach(div => {
         div.style.display = "none"
@@ -103,6 +103,7 @@ function load_weather_page(city_general_info, weather_info) {
     clear_page()
     const weather_page = document.querySelector("#city-weather-page")
     weather_page.style.display = "block";
+    const line_break = document.createElement("br")
 
     //title for page with city
     const city_title_div = document.createElement("div")
@@ -116,12 +117,38 @@ function load_weather_page(city_general_info, weather_info) {
     city_title_div.append(city_title, country_title)
     weather_page.querySelector("#city-weather-page-title-div").append(city_title_div);
 
+    //adding the date buttons 
     const date_div = weather_page.querySelector("#city-weather-page-button-div");
-    console.log(weather_info.daily.time);
     for (date in weather_info.daily.time) {
         let date_button = document.createElement("button");
         date_button.innerHTML = weather_info.daily.time[date]
         date_button.setAttribute("class", "weather-page-button")
-        document.querySelector("#city-weather-page #city-weather-page-button-div").append(date_button)
+        date_div.append(date_button)
     }
+
+    //adding the daily divs
+    const daily_div = weather_page.querySelector("#city-weather-page-daily-div");
+
+    //finding current time and date and current temp
+    const current_temp_div = document.createElement("div");
+    const currentDate_overall = new Date().toISOString();
+    const currentTime = currentDate_overall.substring(11,13);
+    const currentTime_int = parseInt(currentTime)
+    const currentDate = currentDate_overall.substring(0,10);
+    const current_temp =  weather_info.hourly.temperature_2m[currentTime_int]
+
+    //adding current temp to its div
+    current_temp_div.setAttribute("class", "weather-page-current-temp-div")
+    const current_temp_note_div = document.createElement("span")
+    current_temp_note_div.innerHTML = "The current temperature is:"
+    const current_temp_int_div = document.createElement("b")
+    current_temp_int_div.innerHTML = `${current_temp}`
+
+    //adding todays date
+    const todays_date = document.createElement("span")
+    todays_date.innerHTML = `Todays date is: ${currentDate}`
+
+    current_temp_div.append(todays_date, line_break,current_temp_note_div,line_break,current_temp_int_div)
+
+    daily_div.append(current_temp_div)
 }

@@ -74,3 +74,17 @@
     color: white;
     background-color: #6D85CA;
 }
+
+#city-weather-page .weather-page-current-temp-div {
+    border: 1px solid #6D85CA;
+    border-radius: 5px;
+    color: #6D85CA;
+    float: left;
+    width: 30%;
+    padding: 20px;
+    margin: 20px;
+}
+
+#city-weather-page .weather-page-current-temp-div b {
+    font-size: 50px;
+}
