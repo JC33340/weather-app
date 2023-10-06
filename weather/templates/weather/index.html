@@ -21,7 +21,57 @@
 <div id = "city-weather-page">
     <div id = "city-weather-page-title-div"></div>
    <div id = "city-weather-page-button-div"></div>
-   <div id = "city-weather-page-daily-div"></div>
-   <div id = "city-weather-page-weekly-div"></div>
+   <div id = "city-weather-page-daily-div">
+        <div class = "weather-page-current-temp-div">
+            <span id = "city-weather-page-daily-temp-date"></span><br>
+            <span id = "city-weather-page-daily-temp-text"></span>
+            <br>
+            <b></b>
+        </div>
+        <div class = "city-weather-page-daily-info-div">
+            <div class = "row">
+                <div class = "col-12">Daily weather information for:<span></span></div>
+            </div>
+            <br>
+            <div class = "row">
+                <div class = "col-3">Sunrise:</div>
+                <div class = "col-3" id = "sunrise"><b></b></div>
+                <div class = "col-3">Sunset:</div>
+                <div class = "col-3" id = "sunset"><b></b></div>
+            </div>
+            <div class = "row">
+                <div class = "col-3">Max temperature:</div>
+                <div class = "col-3" id = "maxTemperature"><b></b></div>
+                <div class = "col-3">Min temperature</div>
+                <div class = "col-3" id = "minTemperature"><b></b></div>
+            </div>
+            <div class = "row">
+                <div class = "col-3">UV index</div>
+                <div class = "col-3" id = "uvIndex"><b></b></div>
+                <div class = "col-3">Precipitation Sum:</div>
+                <div class = "col-3" id = "precipitationSum"><b></b></div>
+            </div>
+        </div>
+   </div>
+
+   <div id = "city-weather-page-hourly-div">
+    <h4>Hourly weather information:</h4>
+    <button id = "temperature-button" class = "button-active">Temperature</button>
+    <button id = "precipitation-sum-button" class = "button-inactive">Precipitation Sum</button>
+    <button id = "humidity-button" class = "button-inactive">Humidity</button>
+    <div class = "row">
+        <div class = "col-3">
+            <table>
+                <tr><th>Time:</th></tr>
+                <tr id = "data-header"><th></th></tr>
+            </table>
+        </div>
+        <div class = "col-9">
+            <table id = "hourly-info-table">
+                <tr id = "time"></tr>
+                <tr id = "data-points"></tr>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}
