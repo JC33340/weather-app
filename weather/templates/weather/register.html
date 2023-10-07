@@ -1,0 +1,27 @@
+{% extends "weather/layout.html" %}
+{% load static %}
+
+{% block title %}
+<title>Register</title>
+<link href = "{% static 'weather/register_styles.css' %}" rel = "stylesheet">
+{% endblock %}
+
+{% block body %}
+<div id = "body">
+    <p>Register for a new account:</p>
+    <span>{% if message %}{{message}}{% endif %}</span>
+    <form action = "{% url 'register' %}" method = "post">
+        {% csrf_token %}
+        <div class = "form-group" id = "top-form">
+            <input class = "form-control" type = "text" placeholder = "Username" autocomplete="off" name = "username">
+        </div>
+        <div class = "form-group">
+            <input class = "form-control" type = "password" placeholder = "Password" autocomplete="off" name = "password">
+        </div>
+        <div class = "form-group" id = "last-form">
+            <input class = "form-control" type = "password" placeholder = "Confirm Password" autocomplete="off" name = "password-confirmation">
+        </div>
+        <button type = "submit">Submit</button>
+    </form>
+</div>
+{% endblock %}
