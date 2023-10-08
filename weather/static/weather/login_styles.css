@@ -1,0 +1,24 @@
+#wrapper-div{
+    text-align: center;
+}
+
+.form-group{
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
+}
+
+#wrapper-div button {
+    margin-top:10px;
+}
+
+#wrapper-div span {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#wrapper-div span#message-div{
+    font-size: 20px;
+    color:red;
+    font-weight:normal;
+}

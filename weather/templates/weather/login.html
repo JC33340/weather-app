@@ -1,5 +1,28 @@
 {% extends "weather/layout.html" %}
+{% load static %}
 
 {% block title %}
 <title>Login</title>
+<link href = "{% static 'weather/login_styles.css' %}" rel = "stylesheet">
+{% endblock %}
+
+{% block body %}
+<div id = "wrapper-div">
+    <span>Sign in:</span>
+    {% if message %}
+    <br>
+    <span id = "message-div">{{message}}</span>
+    {% endif %}
+    <br>
+    <form action = "{% url 'login' %}" method = "post">
+        {% csrf_token %}
+        <div class = "form-group" >
+            <input class = "form-control" type = "text" placeholder = "Username" autocomplete="off" name = "username">
+        </div>
+        <div class = "form-group">
+            <input class = "form-control" type = "password" placeholder = "Password" autocomplete="off" name = "password">
+        </div>
+        <button type = "submit">Sign in</button>
+    </form>
+</div>
 {% endblock %}

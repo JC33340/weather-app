@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
+from django.urls import reverse
 from django.http import HttpResponse
 from django.db import IntegrityError
-
+from django.contrib.auth import authenticate, login, logout
 
 from .models import User
 
@@ -27,5 +28,24 @@ def register(request):
 
         return render(request, 'weather/login.html')
 
-def login(request):
-    return render(request, "weather/login.html")
+def login_view(request):
+    if request.method == "GET":
+        return render(request, "weather/login.html")
+    elif request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        #authenticating user
+        user = authenticate(request, username = username, password = password)
+        print(user, username,password)
+
+        #check if authentication is succesful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "weather/login.html", {"message":"User does not exist"})
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))

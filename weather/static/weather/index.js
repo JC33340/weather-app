@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 })
 
+let weather_page_count = 200;
+const delay_time = 200;
 
 //clearing all divs
 function clear_page() {
@@ -82,7 +84,6 @@ function selection_page(data) {
 function play_selection_page_animation(div_id){
     const div = document.querySelector(div_id);
     div.style.display = "block"; 
-
 }
 
 function weather_data(city_location) {
@@ -120,6 +121,9 @@ function load_weather_page(city_general_info, weather_info) {
 
     //adding the date buttons 
     const date_div = weather_page.querySelector("#city-weather-page-button-div");
+    date_div.style.display = "none";
+    setTimeout(function() {play_selection_page_animation('#city-weather-page-button-div');}, weather_page_count);
+    weather_page_count += delay_time;
 
     for (let i=0;i<weather_info.daily.time.length;i++) {
         let date_button = document.createElement("button");
@@ -149,8 +153,11 @@ function load_weather_page(city_general_info, weather_info) {
 
     //adding current temp to its div
     const daily_temp_div = document.querySelector("#city-weather-page #city-weather-page-daily-div .weather-page-current-temp-div ");
+    daily_temp_div.style.display = "none";
     daily_temp_div.querySelector("#city-weather-page-daily-temp-text").innerHTML = "The current temperature is:"
     daily_temp_div.querySelector("b").innerHTML = `${current_temp}${weather_info.daily_units.temperature_2m_max}`;
+    setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-daily-div .weather-page-current-temp-div")}, weather_page_count)
+    weather_page_count += delay_time
 
     //adding todays date
     daily_temp_div.querySelector("#city-weather-page-daily-temp-date").innerHTML = `Todays date is: ${currentDate}`
@@ -173,6 +180,9 @@ function load_other_info(date, weather_info) {
     daily_info_div.querySelector("#minTemperature b").innerHTML = `${weather_info.daily.temperature_2m_min[date]} ${weather_info.daily_units.temperature_2m_max}`
     daily_info_div.querySelector("#uvIndex b").innerHTML = `${weather_info.daily.uv_index_max[date]}`
     daily_info_div.querySelector("#precipitationSum b").innerHTML = `${weather_info.daily.precipitation_sum[date]} ${weather_info.daily_units.precipitation_sum}`
+    daily_info_div.style.display = "none"
+    setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-daily-div .city-weather-page-daily-info-div");},weather_page_count)
+    weather_page_count += delay_time;
 
     //filling out hourly div
     const hourly_table = document.querySelector("#city-weather-page #city-weather-page-hourly-div #hourly-info-table");
@@ -205,6 +215,7 @@ function change_hourly_div_display (title, data){
 
     //changing button classes to set active one
     const hourly_div = document.querySelector("#city-weather-page #city-weather-page-hourly-div");
+    hourly_div.style.display = "none";
     hourly_div.querySelectorAll("#temperature-button, #humidity-button, #precipitation-sum-button").forEach((element)=>{
         element.className = "button-inactive"
     })
@@ -230,4 +241,6 @@ function change_hourly_div_display (title, data){
         header.innerHTML = "Precipitation Sum(mm):"
         hourly_div.querySelector("#precipitation-sum-button").className = "button-active";
     }
+
+    setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-hourly-div")},weather_page_count)
 }
