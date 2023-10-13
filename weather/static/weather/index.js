@@ -10,8 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 })
 
+//setting global variables
 let weather_page_count = 200;
 const delay_time = 200;
+let access_page_first = false;
 
 //clearing all divs
 function clear_page() {
@@ -71,7 +73,19 @@ function selection_page(data) {
         selection_page_city_div.append(selection_page_city_country_name, line_break, selection_page_population);
 
         city_selector_page.append(selection_page_city_div);
-        selection_page_city_div.addEventListener("click", () => {
+        selection_page_city_div.addEventListener("click", async () => {
+            const response = await fetch("save_city", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: data[i].name,
+                    country: data[i].country,
+                    longitude: data[i].longitude,
+                    latitude: data[i].latitude,
+                    population: data[i].population
+                })
+            })
+            const jsonresponse = await response.json();
+            console.log(jsonresponse)
             weather_data(data[i])
         })
         setTimeout(function() {play_selection_page_animation(`#selection-page-city-div-${i}`);}, count);
@@ -101,11 +115,43 @@ function weather_data(city_location) {
 };
 
 //loading basic weather page
-function load_weather_page(city_general_info, weather_info) {
+async function load_weather_page(city_general_info, weather_info) {
     console.log(city_general_info, weather_info);
     clear_page()
     const weather_page = document.querySelector("#city-weather-page")
     weather_page.style.display = "block";
+
+   
+
+    //save button coding
+    const save_button = weather_page.querySelector("#save-city-button-wrapper-div #city-weather-page-save-button")
+    let save_action = ""
+
+    if (save_button != null){
+        //fetching if this city is saved
+        let saved_city = await fetch("user_saved_city",{
+        method: "POST", 
+        body: JSON.stringify({
+            name: city_general_info.name,
+            longitude: city_general_info.longitude,
+            latitude: city_general_info.latitude
+        })
+        });
+        let saved_city_data = await saved_city.json();
+        console.log(saved_city_data)
+
+        
+        if (saved_city_data.saved_status === true) {
+            save_button.innerHTML = "Unsave"
+            save_action  = "unsave"
+        } else if (saved_city_data.saved_status === false) {
+            save_button.innerHTML = "Save"
+            save_action = "save"
+        }
+    
+        save_button.addEventListener("click", ()=>{change_city_save(save_action,saved_city_data.city_id)})
+    }
+    
 
     //title for page with city
     const city_title_div = document.createElement("div")
@@ -174,15 +220,14 @@ function load_other_info(date, weather_info) {
 
     //filling out the daily info div
     const daily_info_div = document.querySelector("#city-weather-page #city-weather-page-daily-div .city-weather-page-daily-info-div");
+    daily_info_div.querySelector(".row .col-12 span").innerHTML = `${weather_info.daily.time[date]}`;
     daily_info_div.querySelector("#sunrise b").innerHTML = `${weather_info.daily.sunrise[date].substring(11,16)}`
     daily_info_div.querySelector("#sunset b").innerHTML = `${weather_info.daily.sunset[date].substring(11,16)}`
     daily_info_div.querySelector("#maxTemperature b").innerHTML = `${weather_info.daily.temperature_2m_max[date]}${weather_info.daily_units.temperature_2m_max}`
     daily_info_div.querySelector("#minTemperature b").innerHTML = `${weather_info.daily.temperature_2m_min[date]} ${weather_info.daily_units.temperature_2m_max}`
     daily_info_div.querySelector("#uvIndex b").innerHTML = `${weather_info.daily.uv_index_max[date]}`
     daily_info_div.querySelector("#precipitationSum b").innerHTML = `${weather_info.daily.precipitation_sum[date]} ${weather_info.daily_units.precipitation_sum}`
-    daily_info_div.style.display = "none"
-    setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-daily-div .city-weather-page-daily-info-div");},weather_page_count)
-    weather_page_count += delay_time;
+    
 
     //filling out hourly div
     const hourly_table = document.querySelector("#city-weather-page #city-weather-page-hourly-div #hourly-info-table");
@@ -204,7 +249,14 @@ function load_other_info(date, weather_info) {
         time_data.innerHTML = `${weather_info.hourly.time[i].substring(11,17)}`;
         time_row.append(time_data);
     };
-    change_hourly_div_display("temperature",weather_info.hourly.temperature_2m.slice(start_point,end_point));
+    change_hourly_div_display("temperature",weather_info.hourly.temperature_2m.slice(start_point,end_point),date);
+    if (access_page_first === false){
+        document.querySelector("#city-weather-page #city-weather-page-daily-div .city-weather-page-daily-info-div").style.display = "none";
+        setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-daily-div .city-weather-page-daily-info-div");},weather_page_count)
+        weather_page_count += delay_time;
+        setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-hourly-div")},weather_page_count)
+        access_page_first = true;
+    }
 }
 
 
@@ -215,10 +267,12 @@ function change_hourly_div_display (title, data){
 
     //changing button classes to set active one
     const hourly_div = document.querySelector("#city-weather-page #city-weather-page-hourly-div");
-    hourly_div.style.display = "none";
     hourly_div.querySelectorAll("#temperature-button, #humidity-button, #precipitation-sum-button").forEach((element)=>{
         element.className = "button-inactive"
     })
+    if (access_page_first === false){
+        hourly_div.style.display = "none";
+    }
     
     //inserting data into the table
     for (let i=0;i<data.length;i++){
@@ -241,6 +295,32 @@ function change_hourly_div_display (title, data){
         header.innerHTML = "Precipitation Sum(mm):"
         hourly_div.querySelector("#precipitation-sum-button").className = "button-active";
     }
+    
+}
 
-    setTimeout(()=>{play_selection_page_animation("#city-weather-page #city-weather-page-hourly-div")},weather_page_count)
+async function change_city_save(action, city_id){
+    const save_button = document.querySelector("#city-weather-page #save-city-button-wrapper-div #city-weather-page-save-button")
+    const new_save_button = save_button.cloneNode(true)
+    save_button.parentNode.replaceChild(new_save_button, save_button)
+    let change_save_data = await fetch("saving_city",{
+        method: "POST",
+        body: JSON.stringify({
+            action: action,
+            id: city_id
+        })
+    })
+    let change_save_data_json = await change_save_data.json();
+    console.log(change_save_data_json)
+
+    let save_action
+
+    if (action === "save"){
+        new_save_button.innerHTML = "Unsave"
+        save_action = "unsave"
+    } else if (action === "unsave"){
+        new_save_button.innerHTML = "Save"
+        save_action = "save"
+    }
+
+    new_save_button.addEventListener("click", ()=>{change_city_save(save_action,city_id)})
 }

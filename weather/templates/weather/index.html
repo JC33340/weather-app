@@ -13,13 +13,18 @@
     <h1>Search for a city</h1>
     <form id = "search-form">
         <input id = "search-form-input" type = "text" autocomplete = "off" autofocus = "off" placeholder="City">
-        <button type = "submit">Search</button>
+        <button type = "submit" >Search</button>
     </form>
 </div>
 <div id = "city-selection-page"><h1> Select your city:</h1></div>
 
 <div id = "city-weather-page">
     <div id = "city-weather-page-title-div"></div>
+    {% if user.is_authenticated %}
+    <div id = "save-city-button-wrapper-div">
+        <button class = "button-inactive" id = "city-weather-page-save-button">Save</button>
+    </div>
+    {% endif %}
    <div id = "city-weather-page-button-div"></div>
    <div id = "city-weather-page-daily-div">
         <div class = "weather-page-current-temp-div">
@@ -30,7 +35,7 @@
         </div>
         <div class = "city-weather-page-daily-info-div">
             <div class = "row">
-                <div class = "col-12">Daily weather information for:<span></span></div>
+                <div class = "col-12">Daily weather information for: <span></span></div>
             </div>
             <br>
             <div class = "row">
