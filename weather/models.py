@@ -15,3 +15,8 @@ class City(models.Model):
 class SavedCity(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="savedcity_city")
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "savedcity_user")
+
+    def serialize(self):
+        return{
+            "city": self.city,
+        }

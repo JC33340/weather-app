@@ -8,6 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
         search_city()
     })
+
+    //saved cities button coding
+    const saved_cities_button = document.querySelector(".container-fluid #navbarNav .navbar-nav .nav-item #saved-cities-button");
+    if (saved_cities_button != null) {
+        saved_cities_button.addEventListener("click", ()=>{
+            load_saved_cities()
+        })
+    }
 })
 
 //setting global variables
@@ -42,7 +50,7 @@ function search_city(){
     .then(res => res.json())
     .then(data =>{
         console.log(data)
-        selection_page(data);
+        selection_page(data, "search-cities");
     })
     } catch(err) {
         console.log(`ERROR: ${err}`)
@@ -50,10 +58,20 @@ function search_city(){
 
 }; 
 
-function selection_page(data) {
+function selection_page(data, page_type) {
     clear_page();
-    const city_selector_page = document.querySelector("#city-selection-page")
-    city_selector_page.style.display = "block";
+
+    //changing selection page title depending on the type of page being called
+    const selection_page_title = document.querySelector("#city-selection-page h1")
+    if (page_type === "search-cities"){
+        selection_page_title.innerHTML = "Select your city:"
+    } else if (page_type === "saved-cities"){
+        selection_page_title.innerHTML = "Saved cities:"
+    }
+
+    const city_selector_page = document.querySelector("#city-selection-page #city-selection-page-wrapper")
+    city_selector_page.innerHTML = ""
+    document.querySelector("#city-selection-page").style.display = "block";
     let count = 0;
     for(let i = 0; i < data.length; i++) {
         let selection_page_city_div = document.createElement("div");
@@ -169,6 +187,10 @@ async function load_weather_page(city_general_info, weather_info) {
     const date_div = weather_page.querySelector("#city-weather-page-button-div");
     date_div.style.display = "none";
     setTimeout(function() {play_selection_page_animation('#city-weather-page-button-div');}, weather_page_count);
+    weather_page_count += delay_time;
+
+    //setting timeout for save div
+    setTimeout(function() {play_selection_page_animation('#city-weather-page #save-city-button-wrapper-div');}, weather_page_count);
     weather_page_count += delay_time;
 
     for (let i=0;i<weather_info.daily.time.length;i++) {
@@ -323,4 +345,11 @@ async function change_city_save(action, city_id){
     }
 
     new_save_button.addEventListener("click", ()=>{change_city_save(save_action,city_id)})
+}
+
+async function load_saved_cities(){
+    let data = await fetch("saved_cities");
+    let data_json = await data.json();
+    console.log(data_json.saved_cities)
+    selection_page(data_json.saved_cities, "saved-cities")
 }

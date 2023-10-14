@@ -98,3 +98,17 @@ def saving_city(request):
         
     else:
         return render(request, "weather/index.html")
+    
+@csrf_exempt
+def saved_cities(request):
+    if request.user.is_authenticated:
+        saved_cities = SavedCity.objects.filter(user_id = request.user).values("city_id")
+        city_id = []
+        for city in saved_cities:
+            city_id.append(city["city_id"])
+        city_info = City.objects.filter(pk__in = city_id).values()
+        city_info_list = []
+        for data in city_info:
+            city_info_list.append(data)
+        print(saved_cities, city_id, city_info)
+    return JsonResponse({"saved_cities":city_info_list})

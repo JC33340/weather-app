@@ -183,3 +183,10 @@
     animation-fill-mode: forwards;
     position: relative;
 }
+
+#city-weather-page #save-city-button-wrapper-div{
+    animation-name: slide;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    position: relative;
+}
