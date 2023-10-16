@@ -139,8 +139,6 @@ async function load_weather_page(city_general_info, weather_info) {
     const weather_page = document.querySelector("#city-weather-page")
     weather_page.style.display = "block";
 
-   
-
     //save button coding
     const save_button = weather_page.querySelector("#save-city-button-wrapper-div #city-weather-page-save-button")
     let save_action = ""
@@ -172,19 +170,14 @@ async function load_weather_page(city_general_info, weather_info) {
     
 
     //title for page with city
-    const city_title_div = document.createElement("div")
-    city_title_div.setAttribute("id", "city_title_div")
-    const city_title = document.createElement("h1");
-    const country_title = document.createElement("h3")
-    city_title.style.display = "inline";
-    country_title.style.display = "inline";
-    city_title.innerHTML = `${city_general_info.name}, `
-    country_title.innerHTML = `${city_general_info.country}`
-    city_title_div.append(city_title, country_title)
-    weather_page.querySelector("#city-weather-page-title-div").append(city_title_div);
+    const city_title = document.querySelector("#city-weather-page #city-weather-page-title-div #city_title_div h1");
+    const country_title = document.querySelector("#city-weather-page #city-weather-page-title-div #city_title_div h3")
+    city_title.innerHTML = `${city_general_info.name}, `;
+    country_title.innerHTML = `${city_general_info.country}`;
 
     //adding the date buttons 
     const date_div = weather_page.querySelector("#city-weather-page-button-div");
+    date_div.innerHTML = "";
     date_div.style.display = "none";
     setTimeout(function() {play_selection_page_animation('#city-weather-page-button-div');}, weather_page_count);
     weather_page_count += delay_time;
